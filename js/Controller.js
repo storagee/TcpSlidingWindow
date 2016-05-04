@@ -2,6 +2,7 @@ var myApp = angular.module('myApp', []);
 
 myApp.controller('Controller', function ($scope) {
 
+    //$scope.accumulateTime = 5000;
     $scope.distance = 300;
     $scope.count = 20;
     $scope.speed = 250;
@@ -14,10 +15,11 @@ myApp.controller('Controller', function ($scope) {
     $scope.receivingWindowSize = $scope.defaultWindowSize;
     $scope.rto = 10;
     $scope.rtt = $scope.distance / $scope.speed;
-    $scope.lostRate = 0.5;
+    $scope.lostRate = 0;
     $scope.reset = function () {
         location.reload();
     };
+    $scope.is20sended = false;//fix bug
 
     var receivingPlaces = [];
     var sendingDatums = [];
@@ -44,7 +46,7 @@ myApp.controller('Controller', function ($scope) {
             sendingDatums.push(sendingDatum);
         }
         for (var i = 0; i < lostCount; i++) {
-            sendingDatums[tempArray[i]].lostState = Math.random() > 0.5 ? 1 : 2;
+            sendingDatums[tempArray[i]].lostState = Math.random() > 0.5 ? 2 : 2;
         }
         //var tempCount = 0;
         //for(var i=0; i<sendingDatums.length; i++){
@@ -54,7 +56,6 @@ myApp.controller('Controller', function ($scope) {
         //}
         //console.log(tempCount/$scope.count);
         $scope.sendingDatums = sendingDatums;
-        console.log(sendingDatums);
         //发送
         var sendingWindow = new SendingWindow($scope);
         for (var i = 0; i < $scope.defaultWindowSize; i++) {
@@ -70,6 +71,8 @@ myApp.controller('Controller', function ($scope) {
 
         $scope.start = function () {
             sendingWindow.sendAll();
+            $('input').attr('disabled', 'disabled');
+            $('.start-btn').attr('disabled', 'disabled');
         };
         //接收
         var receivingWindow = new ReceivingWindow($scope);
@@ -83,10 +86,7 @@ myApp.controller('Controller', function ($scope) {
 
         //确认
         $scope.confirm[0].addEventListener('DOMNodeInserted', function () {
-            var confirmIndex = event.target.id.slice(0, event.target.id.indexOf('r'));
-            sendingWindow.shiftN(1);
-            sendingWindow.push($scope.sendingDatums[confirmIndex - 1 + $scope.defaultWindowSize * 1])
-            sendingWindow.sendNew();
+            sendingWindow.confirm(event.target);
         });
     });
 

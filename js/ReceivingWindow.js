@@ -30,9 +30,9 @@ ReceivingWindow.prototype.receive = function (datum) {
                 return false;
             }
         }else{
+            //如果接收窗口有元素了，那么必须是相连的元素
             var lastDatum = that.datums[that.datums.length-1];
             if(datum.getId()-lastDatum.getId() == 1){
-                //如果接收窗口有元素了，那么必须是相连的元素
                 return true;
             }else{
                 return false;
@@ -43,10 +43,11 @@ ReceivingWindow.prototype.receive = function (datum) {
     if(isDatumValid(datum)){
         this.datums.push(datum);
         datum.go('down');
-        this.shiftN(1);
-        console.log(this.datums);
+        //this.shiftN(1);
         this.startIndex++;
         this.updateUI();
+    }else{
+        //console.log(this.datums);
     }
 };
 

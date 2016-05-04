@@ -19,8 +19,8 @@ Datum.prototype.go = function (direction) {
             });
         }else if(this.lostState == 1){
             //发送阶段丢失
-            console.log('sending lost');
-            cloneDatum.velocity({bottom: this.$scope.distance/2+'px', opacity: 0}, ((this.$scope.distance/2)/this.$scope.speed)*1000, function () {
+            cloneDatum.velocity({bottom: this.$scope.distance+'px', opacity: 0}, ((this.$scope.distance)/this.$scope.speed)*1000, function () {
+                console.log('sending lost');
                 cloneDatum.remove();
             });
         }
@@ -29,7 +29,6 @@ Datum.prototype.go = function (direction) {
         var cloneDatum = $datumElement.clone(true);
         //cloneDatum.css({position: 'absolute', left: 50*(cloneDatum.attr('id')-1) + 'px'});
         cloneDatum.appendTo($('.receiver'));
-        console.log(this.lostState);
         if(this.lostState == 0){
             //确认阶段不丢失
             cloneDatum.velocity({top: this.$scope.distance+'px'}, (this.$scope.distance/this.$scope.speed)*1000, function () {
@@ -37,8 +36,8 @@ Datum.prototype.go = function (direction) {
                 cloneDatum.remove();
             });
         }else{
-            console.log('confirm lost')
-            cloneDatum.velocity({top: this.$scope.distance/2+'px', opacity: 0}, ((this.$scope.distance/2)/this.$scope.speed)*1000, function () {
+            cloneDatum.velocity({top: this.$scope.distance+'px', opacity: 0}, ((this.$scope.distance)/this.$scope.speed)*1000, function () {
+                console.log('confirm lost');
                 cloneDatum.remove();
             });
         }
@@ -51,9 +50,10 @@ Datum.prototype.active = function(){
 };
 
 Datum.prototype.getId = function () {
-    if(this.id.indexOf('received') == -1){
-        return this.id;
+    var id = this.id + '';
+    if(id.indexOf('received') == -1){
+        return id;
     }else{
-        return this.id.slice(0, this.id.indexOf('received'));
+        return id.slice(0, this.id.indexOf('received'));
     }
 };
