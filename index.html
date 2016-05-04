@@ -1,0 +1,55 @@
+<!doctype html>
+<html ng-app="myApp" lang="zh-cn">
+<head>
+    <meta charset="UTF-8">
+    <title>TCP Sliding Window</title>
+    <link rel="stylesheet" href="style/css/TcpSlidingWindow.css"/>
+    <link rel="stylesheet" href="style/css/bootstrap.min.css"/>
+</head>
+<body>
+<div ng-controller="Controller">
+    <h1>TCP滑动窗口协议仿真</h1>
+    <ul class="receiver">
+        <div class="receiving-container"></div>
+        <li ng-repeat="receivingPlace in receivingPlaces" id="{{receivingPlace.id}}"></li>
+        <div class="default-window receiving-window"></div>
+    </ul>
+    <ul class="sender">
+        <div class="confirm-container"></div>
+        <li ng-repeat="sendingDatum in sendingDatums" data-lostState="{{sendingDatum.lostState}}" id="{{sendingDatum.id}}" ng-bind="{{sendingDatum.id}}"></li>
+        <div class="default-window sending-window"></div>
+    </ul>
+    <form class="form-inline">
+        <div class="form-group">
+            <label for="window-size">窗口大小</label>
+            <input ng-model="defaultWindowSize" type="text" class="form-control" id="window-size" placeholder="请输入窗口大小">
+        </div>
+        <div class="form-group">
+            <label for="rto">RTO</label>
+            <input ng-model="rto" type="text" class="form-control" id="rto" placeholder="请输入重传时间">
+        </div>
+        <div class="form-group">
+            <label for="rtt">RTT</label>
+            <input ng-model="rtt" type="text" class="form-control" id="rtt" placeholder="请输入往返时间">
+        </div>
+        <div class="form-group">
+            <label for="lost-rate">丢失率</label>
+            <input ng-model="lostRate" type="text" class="form-control" id="lost-rate" placeholder="请输入丢失率">
+        </div>
+        <div class="form-group">
+            <label for="speed">速度</label>
+            <input ng-model="speed" type="text" class="form-control" id="speed" placeholder="请输入速度">
+        </div>
+        <button ng-click="start()" class="btn btn-default" type="submit">开始</button>
+        <button ng-click="reset()" type="text" class="btn btn-default">重置</button>
+    </form>
+</div>
+<script src="js/jquery-1.11.3.min.js"></script>
+<script src="js/velocity.min.js"></script>
+<script src="js/angular.min.js"></script>
+<script src="js/Datum.js"></script>
+<script src="js/Controller.js"></script>
+<script src="js/SendingWindow.js"></script>
+<script src="js/ReceivingWindow.js"></script>
+</body>
+</html>
