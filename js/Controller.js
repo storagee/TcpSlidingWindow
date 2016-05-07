@@ -46,7 +46,7 @@ myApp.controller('Controller', function ($scope) {
             sendingDatums.push(sendingDatum);
         }
         for (var i = 0; i < lostCount; i++) {
-            sendingDatums[tempArray[i]].lostState = Math.random() > 0.5 ? 2 : 2;
+            sendingDatums[tempArray[i]].lostState = Math.random() > 0.5 ? 1 : 2;
         }
         //var tempCount = 0;
         //for(var i=0; i<sendingDatums.length; i++){
