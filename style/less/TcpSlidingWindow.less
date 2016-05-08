@@ -1,83 +1,160 @@
-*{
+* {
   margin: 0;
   padding: 0;
-  h1{
-    text-align: center;
-    margin: 35px !important;
-  }
-  .receiver,
-  .sender{
-    width: 1000px;
-    margin: 0 auto;
-    position: relative;
-    &:after{
-      content: '';
-      display: block;
-      visibility: hidden;
-      height: 0;
-      clear: both;
-    }
+}
+
+body {
+  overflow: hidden;
+}
+
+h1 {
+  text-align: center;
+  margin: 35px !important;
+}
+
+.receiver,
+.sender {
+  width: 1000px;
+  margin: 0 auto;
+  position: relative;
+  &:after {
+    content: '';
     display: block;
-    li{
-      float: left;
-      position: relative;
-      display: block;
-      margin: 10px;
-      width: 30px;
-      height: 30px;
-      background-color: black;
-      text-align: center;
-      line-height: 30px;
-      color: white;
-      -webkit-border-radius: 50%;
-      -moz-border-radius: 50%;
-      border-radius: 50%;
-      list-style-type: none;
-      border: solid 1px black;
-    }
-    .active{
-      background-color: transparent;
-      color: black;
-      border: solid 1px black;
-    }
-    .sending-window,
-    .receiving-window{
-      position: absolute;
-      top: 50%;
-      margin-top: -20px;
-      left: 0;
-      width: 250px;
+    visibility: hidden;
+    height: 0;
+    clear: both;
+  }
+  display: block;
+  li {
+    float: left;
+    position: relative;
+    display: block;
+    margin: 10px;
+    width: 30px;
+    height: 30px;
+    background-color: black;
+    text-align: center;
+    line-height: 30px;
+    color: white;
+    -webkit-border-radius: 50%;
+    -moz-border-radius: 50%;
+    border-radius: 50%;
+    list-style-type: none;
+    border: solid 1px black;
+  }
+  .active {
+    background-color: transparent;
+    color: black;
+    border: solid 1px black;
+  }
+  .sending-window,
+  .receiving-window {
+    position: absolute;
+    top: 50%;
+    margin-top: -20px;
+    left: 0;
+    width: 250px;
+    height: 40px;
+    -webkit-border-radius: 15px;
+    -moz-border-radius: 15px;
+    border-radius: 15px;
+    border: solid black 1px;
+    .progress-wrapper {
+      width: 100%;
       height: 40px;
       -webkit-border-radius: 15px;
       -moz-border-radius: 15px;
       border-radius: 15px;
-      border: solid black 1px;
+      overflow: hidden;
     }
-  }
-  .receiver{
-    .receiving-container{
-      position: relative;
-      li{
-        z-index: 1;
-      }
+    .cts-progress {
+      height: 40px;
+      width: 0;
+      background: rgba(0, 0, 0, 0.3);
     }
-    li{
-      background-color: #ADADAD;
-      border: solid 1px #ADADAD;
-      color: #ADADAD;
-    }
-  }
-  .sender{
-    margin-top: 250px;
-    li{
-
-    }
-  }
-  form{
-    width: 990px;
-    margin: 80px auto;
-    .form-control{
-      width: 130px !important;
+    .tip{
+      font-size: 12px;
+      display: block;
+      position: absolute;
+      top: -20px;
     }
   }
 }
+
+.receiver {
+  .sending-confirm-container {
+    position: relative;
+  }
+  .receiving-container {
+    position: relative;
+    li {
+      z-index: 1;
+    }
+  }
+  li {
+    background-color: #ADADAD;
+    border: solid 1px #ADADAD;
+    color: #ADADAD;
+  }
+  .last {
+    position: absolute;
+    right: -50px;
+    background-color: red;
+    border: solid 1px red;
+  }
+}
+
+.sender {
+  margin-top: 250px;
+  li {
+
+  }
+}
+
+form {
+  width: 1110px;
+  margin: 50px auto;
+  .form-control {
+    width: 130px !important;
+  }
+  .first-addon{
+    width: 167px !important;
+  }
+  .last-addon{
+    width: 51px !important;
+  }
+}
+
+.log {
+  font-family: '微软雅黑';
+  position: absolute;
+  left: 50%;
+  top: 197px;
+  background: #D3D3D3;
+  margin-left: -225px;
+  width: 450px;
+  height: 170px;
+  //border: solid 1px black;
+  .normal,
+  .error{
+    position: absolute;
+    height: 170px;
+    width: 225px;
+    overflow: hidden;
+    padding-top: 10px;
+    padding-bottom: 10px;
+  }
+  .normal {
+    left: 0;
+  }
+  .error {
+    right: 0;
+  }
+  li {
+    height: 25px;
+    line-height: 25px;
+    list-style-type: none;
+    margin-left: 20px;
+  }
+}
+

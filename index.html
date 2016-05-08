@@ -5,49 +5,78 @@
     <title>TCP Sliding Window</title>
     <link rel="stylesheet" href="style/css/TcpSlidingWindow.css"/>
     <link rel="stylesheet" href="style/css/bootstrap.min.css"/>
+    <link rel="stylesheet" href="style/css/jquery.mCustomScrollbar.css"/>
 </head>
 <body>
 <div ng-controller="Controller">
+    <div class="log">
+        <ul class="normal">
+            <li>准备就绪</li>
+            <li>请开始发送</li>
+        </ul>
+        <ul class="error">
+
+        </ul>
+    </div>
     <h1>TCP滑动窗口协议仿真</h1>
     <ul class="receiver">
+        <div class="sending-confirm-container"></div>
         <div class="receiving-container"></div>
-        <li ng-repeat="receivingPlace in receivingPlaces" id="{{receivingPlace.id}}"></li>
-        <div class="default-window receiving-window"></div>
+        <li ng-repeat="receivingPlace in receivingPlaces" id="{{receivingPlace.id}}" ng-class="{'last':receivingPlace.id==41}"></li>
+        <div class="default-window receiving-window"><span class="tip">接收窗口</span><div class="progress-wrapper"><div class="cts-progress"></div></div></div>
     </ul>
     <ul class="sender">
+        <li ng-repeat="sendingDatum in sendingDatums" id="{{sendingDatum.id}}" ng-bind="{{sendingDatum.id}}"></li>
         <div class="confirm-container"></div>
-        <li ng-repeat="sendingDatum in sendingDatums" data-lostState="{{sendingDatum.lostState}}" id="{{sendingDatum.id}}" ng-bind="{{sendingDatum.id}}"></li>
-        <div class="default-window sending-window"></div>
+        <div class="default-window sending-window"><span class="tip">发送窗口</span><div class="progress-wrapper"><div class="cts-progress"></div></div></div>
     </ul>
     <form class="form-inline">
         <div class="form-group">
-            <label for="window-size">窗口大小</label>
-            <input ng-model="defaultWindowSize" type="text" class="form-control" id="window-size" placeholder="请输入窗口大小">
+            <div class="input-group">
+                <label class="input-group-addon first-addon" for="window-size">窗口大小</label>
+                <input ng-model="defaultWindowSize" type="text" class="form-control" id="window-size" placeholder="请输入窗口大小">
+                <span class="input-group-addon last-addon">个</span>
+            </div>
         </div>
         <div class="form-group">
-            <label for="rto">RTO</label>
-            <input ng-model="rto" type="text" class="form-control" id="rto" placeholder="请输入重传时间">
+            <div class="input-group">
+                <label class="input-group-addon first-addon" for="rto">RTO（超时重传时间）</label>
+                <input ng-model="rto" type="text" class="form-control" id="rto" placeholder="请输入重传时间">
+                <span class="input-group-addon last-addon">ms</span>
+            </div>
         </div>
         <div class="form-group">
-            <label for="rtt">RTT</label>
-            <input ng-model="rtt" type="text" class="form-control" id="rtt" placeholder="请输入往返时间">
-        </div>
-        <div class="form-group">
-            <label for="lost-rate">丢失率</label>
-            <input ng-model="lostRate" type="text" class="form-control" id="lost-rate" placeholder="请输入丢失率">
-        </div>
-        <div class="form-group">
-            <label for="speed">速度</label>
-            <input ng-model="speed" type="text" class="form-control" id="speed" placeholder="请输入速度">
+            <div class="input-group">
+                <label class="input-group-addon first-addon" for="rtt">RTT（传输往返时间）</label>
+                <input ng-model="rtt" readonly type="text" class="form-control" id="rtt" placeholder="请输入往返时间">
+                <span class="input-group-addon last-addon">ms</span>
+            </div>
         </div>
         <button ng-click="start()" class="btn btn-default start-btn" type="submit">开始</button>
+        <br/>
+        <br/>
+        <div class="form-group">
+            <div class="input-group">
+                <label class="input-group-addon first-addon" for="lost-rate">丢失率</label>
+                <input ng-model="lostRate" type="text" class="form-control" id="lost-rate" placeholder="请输入丢失率">
+                <span class="input-group-addon last-addon">%</span>
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="input-group">
+                <label class="input-group-addon first-addon" for="speed">传输速度</label>
+                <input ng-model="speed" type="text" class="form-control" id="speed" placeholder="请输入速度">
+                <span class="input-group-addon last-addon">px/s</span>
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="input-group">
+                <label class="input-group-addon first-addon" for="accumulateTime">累计确认时间</label>
+                <input ng-model="recAccumulateTime" type="text" class="form-control" id="accumulateTime" placeholder="请输入累积确认时间">
+                <span class="input-group-addon last-addon">ms</span>
+            </div>
+        </div>
         <button ng-click="reset()" type="text" class="btn btn-default">重置</button>
-        <!--<br/>-->
-        <!--<br/>-->
-        <!--<div class="form-group">-->
-            <!--<label for="accumulateTime">累计时间</label>-->
-            <!--<input ng-model="accumulateTime" type="text" class="form-control" id="accumulateTime" placeholder="请输入累积确认时间">-->
-        <!--</div>-->
     </form>
 </div>
 <script src="js/jquery-1.11.3.min.js"></script>
@@ -57,5 +86,8 @@
 <script src="js/Controller.js"></script>
 <script src="js/SendingWindow.js"></script>
 <script src="js/ReceivingWindow.js"></script>
+<script src="js/jquery.mCustomScrollbar.concat.min.js"></script>
+<script src="js/bootstrap.min.js"></script>
+<script src="js/bootbox.min.js"></script>
 </body>
 </html>
