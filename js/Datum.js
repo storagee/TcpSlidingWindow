@@ -11,6 +11,7 @@ Datum.prototype.go = function (direction) {
         var $datumElement = $('#'+this.id);
         var cloneDatum = $datumElement.clone();
         cloneDatum.css({position: 'absolute', left: 50*(cloneDatum.attr('id')-1) + 'px'});
+        cloneDatum.removeClass('active');
         $datumElement.after(cloneDatum);
         var isLost = Math.random() < this.$scope.lostRate / 100;
         $scope.log('发送数据:'+this.getId());
