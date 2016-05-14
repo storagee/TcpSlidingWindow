@@ -26,6 +26,7 @@ Datum.prototype.go = function (direction) {
             cloneDatum.velocity({bottom: this.$scope.distance/2+'px', opacity: 0}, ((this.$scope.distance/2)/this.$scope.speed)*1000, function () {
                 console.log('发送丢失:' + that.getId());
                 that.$scope.error('发送数据'+(that.getId())+'丢失');
+                that.$scope.realSendingLostCount++;
                 cloneDatum.remove();
             });
         }
@@ -61,6 +62,7 @@ Datum.prototype.sendingConfirm = function () {
     var randomNumber = Math.random();
     var isLost = randomNumber < this.$scope.lostRate / 100;
     $scope.log('确认数据:'+(this.getId()-20));
+    $scope.confirmTotalCount++;
     if(!isLost){
         //确认阶段不丢失
         cloneSignal.velocity({top: this.$scope.distance+'px'}, (this.$scope.distance/this.$scope.speed)*1000, function () {
@@ -71,6 +73,7 @@ Datum.prototype.sendingConfirm = function () {
         cloneSignal.velocity({top: this.$scope.distance/2+'px', opacity: 0}, ((this.$scope.distance/2)/this.$scope.speed)*1000, function () {
             console.log('确认丢失:'+(that.getId()-20));
             that.$scope.error('确认数据'+(that.getId()-20)+'丢失');
+            $scope.realConfirmLostCount++;
             cloneSignal.remove();
         });
     }
@@ -89,3 +92,6 @@ Datum.prototype.getId = function () {
         return id.slice(0, this.id.indexOf('received')) * 1;
     }
 };
+
+
+

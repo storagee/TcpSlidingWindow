@@ -5,6 +5,8 @@
 }
 body {
   overflow: hidden;
+  -webkit-background-size: 100% 100%;
+  background-size: 100% 100%;
 }
 h1 {
   text-align: center;
@@ -117,7 +119,7 @@ h1 {
 }
 form {
   width: 1130px;
-  margin: 50px auto;
+  margin: 30px auto;
 }
 form .form-control {
   width: 130px !important;
@@ -127,6 +129,7 @@ form .first-addon {
 }
 form .last-addon {
   width: 51px !important;
+  font-size: 12px;
 }
 .log {
   font-family: '微软雅黑';
@@ -172,4 +175,10 @@ form .last-addon {
   top: 50%;
   left: -60px;
   margin-top: -8px;
+}
+.chart {
+  width: 568px;
+}
+.modal-body {
+  min-height: 500px;
 }

@@ -22,11 +22,19 @@ myApp.controller('Controller', function ($scope) {
     $scope.rto = 5000;//超时重传时间
     $scope.rtt = ($scope.distance / $scope.speed) * 1000;
 
+    //重复率等数据的分析
+    $scope.sendingTotalCount = 0;
+    $scope.confirmTotalCount = 0;
+    $scope.repeatCount = 0;
+    $scope.realSendingLostCount = 0;
+    $scope.realConfirmLostCount = 0;
+
     $scope.$watch('speed', function () {
         $scope.rtt = ($scope.distance / $scope.speed) * 1000;
     });
 
     $scope.lostRate = 10;
+
     var normalPlace = $('.normal');
     var errorPlace = $('.error');
     normalPlace.mCustomScrollbar({
@@ -86,8 +94,8 @@ myApp.controller('Controller', function ($scope) {
             sendingWindow.push(sendingDatums[i]);
         }
     });
-
     $scope.start = function () {
+        $scope.startTime = Date.now();
         sendingWindow.send($scope.defaultWindowSize);
         $('input').attr('disabled', 'disabled');
         $('.start-btn').attr('disabled', 'disabled');
@@ -106,4 +114,56 @@ myApp.controller('Controller', function ($scope) {
     $scope.confirm[0].addEventListener('DOMNodeInserted', function () {
         sendingWindow.confirm(event.target);
     });
+
+    $('.btn-group .btn').click(function () {
+       $(this).addClass('btn-primary').removeClass('btn-default').siblings().removeClass('btn-primary').addClass('btn-default');
+    });
+
+    //按钮改变
+    $scope.setSingleWindow = function () {
+        $scope.defaultWindowSize = 1;
+        $scope.rto = 3000;
+        $scope.lostRate = 15;
+        $scope.recAccumulateTime = 300;
+        $scope.rtt = 1200;
+        $scope.speed = 250;
+    };
+    $scope.setQuickMode = function () {
+        $scope.defaultWindowSize = 8;
+        $scope.rto = 3700;
+        $scope.lostRate = 30;
+        $scope.speed = 600;
+        $scope.recAccumulateTime = 700;
+        $scope.rtt = 1200;
+    };
+    $scope.setHeightLostRate = function () {
+        $scope.rto = 1000;
+        $scope.lostRate = 80;
+        $scope.speed = 700;
+        $scope.recAccumulateTime = 500;
+        $scope.defaultWindowSize = 5;
+        $scope.rtt = 1200;
+    };
+    $scope.setTimeoutReSend = function () {
+        $scope.rto = 1000;
+        $scope.defaultWindowSize = 5;
+        $scope.rtt = 1200;
+        $scope.lostRate = 10;
+        $scope.speed = 250;
+        $scope.recAccumulateTime = 1000;//1000比较好
+    };
+    $scope.setRecAccumulateTime = function () {
+        $scope.recAccumulateTime = 500;
+        $scope.defaultWindowSize = 5;
+        $scope.rto = 5000;//超时重传时间
+        $scope.rtt = 1200;
+        $scope.lostRate = 10;
+        $scope.speed = 250;
+    };
+
+    //$('text').each(function (item, index, array) {
+    //    if(item.eq(0).innerHTML == 'Highcharts.com'){
+    //        item.remove();laizhihui
+    //    }
+    //});
 });

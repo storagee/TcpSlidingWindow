@@ -20,10 +20,10 @@
     </div>
     <h1>TCP滑动窗口协议仿真</h1>
     <ul class="receiver">
-        <div class="sending-confirm-container"></div>
         <div class="receiving-container"></div>
         <li ng-repeat="receivingPlace in receivingPlaces" id="{{receivingPlace.id}}" ng-class="{'last':receivingPlace.id==41}"></li>
         <div class="default-window receiving-window"><span class="tip">接收窗口</span><div class="progress-wrapper"><div class="cts-progress"></div></div></div>
+        <div class="sending-confirm-container"></div>
     </ul>
     <ul class="sender">
         <li ng-repeat="sendingDatum in sendingDatums" id="{{sendingDatum.id}}" ng-bind="{{sendingDatum.id}}"></li>
@@ -52,7 +52,7 @@
                 <span class="input-group-addon last-addon">ms</span>
             </div>
         </div>
-        <button ng-click="start()" class="btn btn-default start-btn" type="submit">开始</button>
+        <button ng-click="start()" class="btn btn-primary start-btn" type="submit">开始</button>
         <br/>
         <br/>
         <div class="form-group">
@@ -77,11 +77,31 @@
             </div>
         </div>
         <button ng-click="reset()" type="text" class="btn btn-default">重置</button>
+        <br/>
+        <br/>
+        <div class="btn-group" role="group">
+            <button class="btn btn-default start-btn" ng-click="setSingleWindow()">停止等待协议</button>
+            <button class="btn btn-default start-btn" ng-click="setQuickMode()">快速模式</button>
+            <button class="btn btn-default start-btn" ng-click="setHeightLostRate()">高丢失率模式</button>
+            <button class="btn btn-default start-btn" ng-click="setTimeoutReSend()">超时重传过快</button>
+            <button class="btn btn-default start-btn" ng-click="setRecAccumulateTime()">累积确认过快</button>
+        </div>
     </form>
     <div class="ruler">
         <span class="tip">300px</span>
     </div>
 </div>
+<script id="tpl" type="text/template">
+    <div class="chart repeat-rate">
+
+    </div>
+    <div class="chart rel-lost-rate">
+
+    </div>
+    <div class="chart rel-confirm-lost-rate">
+
+    </div>
+</script>
 <script src="js/jquery-1.11.3.min.js"></script>
 <script src="js/velocity.min.js"></script>
 <script src="js/angular.min.js"></script>
@@ -92,5 +112,8 @@
 <script src="js/jquery.mCustomScrollbar.concat.min.js"></script>
 <script src="js/bootstrap.min.js"></script>
 <script src="js/bootbox.min.js"></script>
+<script src="js/highcharts.js"></script>
+<script src="js/data.js"></script>
+<script src="js/drilldown.js"></script>
 </body>
 </html>

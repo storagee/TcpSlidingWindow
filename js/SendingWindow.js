@@ -70,18 +70,24 @@ SendingWindow.prototype.send = function (sendCount, isSuccess) {
         console.log('timeoutId:' + this.timeoutId);
         this.timeoutQue.push(this.timeoutId);
     }
+
+    var isInSendingWindow = function (datum) {
+        // 用于防止在发送时延内，窗口已经向前移动的情况，就是已经进入setTimeout，但是窗口向前移动的情况
+        return datum.getId() > that.startIndex;
+    };
+
     for (var i = startIndex; i < this.datums.length; i++) {
         setTimeout((function (datum) {
             return function () {
-                if (datum != undefined && datum.getId() <= $scope.count) {
+                if (datum != undefined && datum.getId() <= $scope.count && isInSendingWindow(datum)) {
                     datum.go('up');
+                    $scope.sendingTotalCount++;
                     if (datum.getId() == 20) {
                         $scope.is20sended = true;
                     }
                 }
             };
         })(this.datums[i]), this.$scope.td * (i - startIndex));
-        //console.log(this.datums[i]);
     }
 };
 
@@ -89,9 +95,10 @@ SendingWindow.prototype.confirm = function (target) {
 
     clearTimeout(this.timeoutId);
     //var timeoutQueIndex = this.timeoutQue.indexOf(this.timeoutId);
-    //if (timeoutQueIndex != -1) {
+    //if (timeoutQueIndex != -1) { auth : laizhihui
     //    this.timeoutQue.splice(timeoutQueIndex, 1);
     //}
+    var that = this;
     this.$progress.stop(true, true);
     this.$progress.velocity({width: '0%'}, 0);
     var confirmIndex = event.target.id - this.$scope.count - 1;
@@ -107,9 +114,142 @@ SendingWindow.prototype.confirm = function (target) {
     this.send(this.$scope.defaultWindowSize, isSuccess);
     if (!this.isSuccess && isSuccess) {
         this.isSuccess = true;
-        bootbox.alert('传输成功！');
+        var totalTime = Date.now() - this.$scope.startTime;
+        //bootbox.alert('传输成功！总用时：'+totalTime + 'ms');
+        showSuccessInfo();
         this.timeoutQue.forEach(function (timeoutId, index, array) {
             clearTimeout(timeoutId);
         });
+    }
+
+    function showSuccessInfo(){
+        bootbox.dialog({
+            title: '传输成功! 总用时：'+totalTime/1000 + 's',
+            message: $('#tpl').html(),
+            buttons: {
+                ok: {
+                    label: '好'
+                }
+            }
+        });
+
+        var repeatRate = (that.$scope.repeatCount / that.$scope.sendingTotalCount) * 100;
+        var sendingLostRate = (that.$scope.realSendingLostCount / that.$scope.sendingTotalCount) * 100;
+        var confirmLostRate = (that.$scope.realConfirmLostCount / that.$scope.confirmTotalCount) * 100;
+        $('.repeat-rate').highcharts({
+            chart: {
+                type: 'pie'
+            },
+            title: {
+                text: 'TCP 传输数据分析 数据重复率'
+            },
+            //subtitle: {
+            //    text: 'fdsafdsf'
+            //},
+            plotOptions: {
+                series: {
+                    dataLabels: {
+                        enabled: true,
+                        format: '{point.name}: {point.y:.1f}%'
+                    }
+                }
+            },
+
+            tooltip: {
+                headerFormat: '<span style="font-size:11px">{series.name}</span><br>',
+                pointFormat: '<span style="color:{point.color}">{point.name}</span>: <b>{point.y:.2f}%</b> of total<br/>'
+            },
+            series: [{
+                name: '数据重复率',
+                colorByPoint: true,
+                data: [{
+                    name: '重复的数据',
+                    y: repeatRate
+                    //drilldown: 'Microsoft Internet Explorer'
+                }, {
+                    name: '正常到达的数据',
+                    y: 100 - repeatRate
+                    //drilldown: 'Chrome'
+                }]
+            }]
+        });
+
+        setTimeout(function () {
+            // Create the chart
+            $('.rel-lost-rate').highcharts({
+                chart: {
+                    type: 'pie'
+                },
+                title: {
+                    text: '实际发送丢失率'
+                },
+                //subtitle: {
+                //    text: 'fdsafdsf'
+                //},
+                plotOptions: {
+                    series: {
+                        dataLabels: {
+                            enabled: true,
+                            format: '{point.name}: {point.y:.1f}%'
+                        }
+                    }
+                },
+
+                tooltip: {
+                    headerFormat: '<span style="font-size:11px">{series.name}</span><br>',
+                    pointFormat: '<span style="color:{point.color}">{point.name}</span>: <b>{point.y:.2f}%</b> of total<br/>'
+                },
+                series: [{
+                    name: '实际发送丢失率',
+                    colorByPoint: true,
+                    data: [{
+                        name: '发送丢失的数据',
+                        y: sendingLostRate
+                        //drilldown: 'Microsoft Internet Explorer'
+                    }, {
+                        name: '正常到达的数据',
+                        y: 100 - sendingLostRate
+                        //drilldown: 'Chrome'
+                    }]
+                }]
+            });
+            $('.rel-confirm-lost-rate').highcharts({
+                chart: {
+                    type: 'pie'
+                },
+                title: {
+                    text: '实际确认丢失率'
+                },
+                //subtitle: {
+                //    text: 'fdsafdsf'
+                //},
+                plotOptions: {
+                    series: {
+                        dataLabels: {
+                            enabled: true,
+                            format: '{point.name}: {point.y:.1f}%'
+                        }
+                    }
+                },
+
+                tooltip: {
+                    headerFormat: '<span style="font-size:11px">{series.name}</span><br>',
+                    pointFormat: '<span style="color:{point.color}">{point.name}</span>: <b>{point.y:.2f}%</b> of total<br/>'
+                },
+                series: [{
+                    name: '实际确认丢失率',
+                    colorByPoint: true,
+                    data: [{
+                        name: '确认丢失的数据',
+                        y: confirmLostRate
+                        //drilldown: 'Microsoft Internet Explorer'
+                    }, {
+                        name: '确认正常的数据',
+                        y: 100 - confirmLostRate
+                        //drilldown: 'Chrome'
+                    }]
+                }]
+            });
+        }, 500);
     }
 };

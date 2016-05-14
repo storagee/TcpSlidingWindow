@@ -44,7 +44,7 @@ ReceivingWindow.prototype.getSendBackIndex = function () {
         for (var i = 1; i < this.datums.length; i++) {
             if (this.datums[i].getId() - this.datums[i - 1].getId() == 1) {
                 sendBackIndex++;
-                //console.log('sendBackIndex in loop:'+sendBackIndex);
+                //console.log('sendBackIndex in loop:'+sendBackIndex laizhihui);
                 if (i == this.datums.length - 1) {
                     //此处，如果不是这样，就无返回了
                     return sendBackIndex;
@@ -110,7 +110,8 @@ ReceivingWindow.prototype.receive = function (datum) {
                 }
             } else {
                 console.log('收到已确认的数据:' + datum.getId());
-                this.$scope.error('收到已确认的数据:' + datum.getId())
+                this.$scope.error('收到已确认的数据:' + datum.getId());
+                this.$scope.repeatCount++;
                 if (!this.$scope.isRecAccumulating) {
                     this.accumulate();
                 }
@@ -118,6 +119,10 @@ ReceivingWindow.prototype.receive = function (datum) {
         } else {
             console.log('收到重复数据:' + datum.getId());
             this.$scope.error('收到重复数据:' + datum.getId());
+            this.$scope.repeatCount++;
+            if (!this.$scope.isRecAccumulating) {
+                this.accumulate();
+            }
         }
         //console.log(this.datums);
     }
