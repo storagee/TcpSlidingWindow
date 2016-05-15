@@ -20,7 +20,7 @@ myApp.controller('Controller', function ($scope) {
     $scope.sendingWindowSize = $scope.defaultWindowSize;
     $scope.receivingWindowSize = $scope.defaultWindowSize;
     $scope.rto = 5000;//超时重传时间
-    $scope.rtt = ($scope.distance / $scope.speed) * 1000;
+    $scope.rtt = ($scope.distance / $scope.speed) * 1000 * 2;
 
     //重复率等数据的分析
     $scope.sendingTotalCount = 0;
@@ -30,7 +30,7 @@ myApp.controller('Controller', function ($scope) {
     $scope.realConfirmLostCount = 0;
 
     $scope.$watch('speed', function () {
-        $scope.rtt = ($scope.distance / $scope.speed) * 1000;
+        $scope.rtt = ($scope.distance / $scope.speed) * 1000 * 2;
     });
 
     $scope.lostRate = 10;
@@ -125,7 +125,7 @@ myApp.controller('Controller', function ($scope) {
         $scope.rto = 3000;
         $scope.lostRate = 15;
         $scope.recAccumulateTime = 300;
-        $scope.rtt = 1200;
+        $scope.rtt = 2400;
         $scope.speed = 250;
     };
     $scope.setQuickMode = function () {
@@ -134,7 +134,7 @@ myApp.controller('Controller', function ($scope) {
         $scope.lostRate = 30;
         $scope.speed = 600;
         $scope.recAccumulateTime = 700;
-        $scope.rtt = 1200;
+        $scope.rtt = 2400;
     };
     $scope.setHeightLostRate = function () {
         $scope.rto = 1000;
@@ -147,7 +147,7 @@ myApp.controller('Controller', function ($scope) {
     $scope.setTimeoutReSend = function () {
         $scope.rto = 1000;
         $scope.defaultWindowSize = 5;
-        $scope.rtt = 1200;
+        $scope.rtt = 2400;
         $scope.lostRate = 10;
         $scope.speed = 250;
         $scope.recAccumulateTime = 1000;//1000比较好
@@ -156,7 +156,7 @@ myApp.controller('Controller', function ($scope) {
         $scope.recAccumulateTime = 500;
         $scope.defaultWindowSize = 5;
         $scope.rto = 5000;//超时重传时间
-        $scope.rtt = 1200;
+        $scope.rtt = 2400;
         $scope.lostRate = 10;
         $scope.speed = 250;
     };
